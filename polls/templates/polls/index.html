@@ -1,6 +1,8 @@
-{% load static %}
+{% extends "polls/base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+
+
+{% block content %}
 
 {% if latest_question_list %}
     <ul>
@@ -11,3 +13,18 @@
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+</form>
+
+{% else %}
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <button type="submit">Log in</button>
+</form>
+{% endif %}
+
+{% endblock %}

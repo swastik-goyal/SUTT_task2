@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 # from debug_toolbar.toolbar import debug_toolbar_urls
+from . import views
 
 
 urlpatterns = [
     path("polls/", include("polls.urls")),
     path('admin/', admin.site.urls),
 
-    
+    path('', include('django.contrib.auth.urls')),
+    path('register/', views.register, name='register'),
 ]

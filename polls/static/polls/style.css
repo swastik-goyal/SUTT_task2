@@ -5,3 +5,12 @@ li a {
 body {
     background: white url("images/bg-image.jpg") no-repeat center center fixed;
 }
+
+.navbar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #2c3e50;
+}
+.navbar a, .navbar span { color: white; text-decoration: none; }

@@ -7,6 +7,9 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -38,7 +41,7 @@ class ResultsView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
