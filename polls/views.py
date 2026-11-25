@@ -3,12 +3,14 @@ from django.template import loader
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import Question, Choice
 from django.db.models import F
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django import forms
 
 
 class IndexView(generic.ListView):
@@ -63,3 +65,23 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+
+
+class CreateView(LoginRequiredMixin, generic.CreateView):
+    model = Question
+    fields = ["question_text", "pub_date"]
+    template_name = "polls/create.html"
+
+    success_url = reverse_lazy("polls:index")
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["pub_date"].widget = forms.DateTimeInput(
+            attrs={"type": "date"},
+            format="%Y-%m-%d",
+        )
+        return form
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
